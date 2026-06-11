@@ -6,10 +6,9 @@ function Students() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
-    useEffect(() => {
-      fetchStudents(); }, []);
   const [students, setStudents] = useState([]);
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     student_name: "",
     father_name: "",
@@ -17,148 +16,117 @@ function Students() {
     roll_no: "",
     course: "",
     admission_date: "",
-  
     aadhaar_no: "",
     dob: "",
     gender: "",
     category: "",
-  
     mobile_no: "",
     father_mobile_no: "",
-  
     address: "",
-  
     total_fee: "",
     other_fee: "",
     discount_fee: "",
   });
-  const updateStudent = async () => {
-  const { error } = await supabase
-    .from("students")
-    .update({
-      name: formData.name,
-      father_name: formData.father_name,
-      class: formData.class,
-      phone: formData.phone,
-    })
-    .eq("id", editingStudent.id);
 
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  setEditingStudent(null);
-
-  setShowModal(false);
-
-  fetchStudents();
-};
+  useEffect(() => {
+    fetchStudents();
+  }, []);
 
   async function fetchStudents() {
-  const { data, error } = await supabase
-    .from("students")
-    .select("*")
-    .order("id");
+    const { data, error } = await supabase
+      .from("students")
+      .select("*")
+      .order("id");
 
-  if (error) {
-    console.error(error);
-    return;
+    if (error) {
+      console.error(error);
+      return;
+    }
+    setStudents(data);
   }
 
-  setStudents(data);
-}
+  const updateStudent = async () => {
+    const { error } = await supabase
+      .from("students")
+      .update({
+        name: formData.name,
+        father_name: formData.father_name,
+        class: formData.class,
+        phone: formData.phone,
+      })
+      .eq("id", editingStudent.id);
 
-const deleteStudent = async (id) => {
-  const confirmDelete = window.confirm(
-    "Delete this student?"
-  );
+    if (error) {
+      console.error(error);
+      return;
+    }
 
-  if (!confirmDelete) return;
+    setEditingStudent(null);
+    setShowModal(false);
+    fetchStudents();
+  };
 
-  const { error } = await supabase
-    .from("students")
-    .delete()
-    .eq("id", id);
+  const deleteStudent = async (id) => {
+    const confirmDelete = window.confirm("Delete this student?");
+    if (!confirmDelete) return;
 
-  if (error) {
-    console.error(error);
-    return;
-  }
+    const { error } = await supabase.from("students").delete().eq("id", id);
+    if (error) {
+      console.error(error);
+      return;
+    }
+    fetchStudents();
+  };
 
-  fetchStudents();
-};
-const openEditModal = (student) => {
-  setEditingStudent(student);
-
-  setFormData({
-    name: student.name || "",
-    father_name: student.father_name || "",
-    class: student.class || "",
-    phone: student.phone || "",
-  });
-
-  setShowModal(true);
-};
+  const openEditModal = (student) => {
+    setEditingStudent(student);
+    setFormData({
+      name: student.name || "",
+      father_name: student.father_name || "",
+      class: student.class || "",
+      phone: student.phone || "",
+    });
+    setShowModal(true);
+  };
 
   const addStudent = async () => {
-  if (!formData.name || !formData.class) return;
+    if (!formData.name || !formData.class) return;
+    const studentCode = `ST${Date.now()}`;
 
-  const studentCode = `ST${Date.now()}`;
-
-  const { error } = await supabase
-    .from("students")
-    .insert([
+    const { error } = await supabase.from("students").insert([
       {
-       student_id: studentCode,
-     
-       student_name: formData.student_name,
-     
-       roll_no: formData.roll_no,
-       course: formData.course,
-       admission_date: formData.admission_date,
-     
-       father_name: formData.father_name,
-       mother_name: formData.mother_name,
-     
-       aadhaar_no: formData.aadhaar_no,
-       dob: formData.dob,
-     
-       gender: formData.gender,
-       category: formData.category,
-     
-       mobile_no: formData.mobile_no,
-       father_mobile_no:
-         formData.father_mobile_no,
-     
-       address: formData.address,
-     
-     },
-      
+        student_id: studentCode,
+        student_name: formData.student_name,
+        roll_no: formData.roll_no,
+        course: formData.course,
+        admission_date: formData.admission_date,
+        father_name: formData.father_name,
+        mother_name: formData.mother_name,
+        aadhaar_no: formData.aadhaar_no,
+        dob: formData.dob,
+        gender: formData.gender,
+        category: formData.category,
+        mobile_no: formData.mobile_no,
+        father_mobile_no: formData.father_mobile_no,
+        address: formData.address,
+      },
     ]);
 
-  if (error) {
-    console.error(error);
-    alert(error.message);
-    return;
-  }
+    if (error) {
+      console.error(error);
+      alert(error.message);
+      return;
+    }
 
-  await fetchStudents();
-
- setFormData({
-  name: "",
-  father_name: "",
-  class: "",
-  phone: "",
-});
-
-  setShowModal(false);
-};
+    await fetchStudents();
+    setFormData({ name: "", father_name: "", class: "", phone: "" });
+    setShowModal(false);
+  };
 
   const filteredStudents = students.filter(
     (student) =>
-      student.name.toLowerCase().includes(search.toLowerCase()) ||
-      student.student_id.toLowerCase().includes(search.toLowerCase())
+      (student.name || "").toLowerCase().includes(search.toLowerCase()) ||
+      (student.student_id || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -166,44 +134,18 @@ const openEditModal = (student) => {
       <div className="page-header">
         <div>
           <h1 className="page-title">Students</h1>
-          <p className="page-subtitle">
-            Manage student records
-          </p>
+          <p className="page-subtitle">Manage student records</p>
         </div>
 
-        <div className="page-top">
-          <button
-            className="back-btn"
-            onClick={() => navigate("/")}
-          >
-            ← Dashboard
-          </button>
-        </div>
-      
-        <button
-          className="btn"
-          onClick={() => {
-          setEditingStudent(null);
-          navigate("/admission");
-
-          setFormData({
-            name: "",
-            father_name: "",
-            class: "",
-            phone: "",
-          });
-
-          setShowModal(true);
-        }}
-        >
-           + New Admissiom
+        <button className="btn" onClick={() => navigate("/admission")}>
+          + New Admission
         </button>
       </div>
 
       <div className="search-box">
         <input
           type="text"
-          placeholder="Search student..."
+          placeholder="Search student by name or ID..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -224,49 +166,39 @@ const openEditModal = (student) => {
           </thead>
 
           <tbody>
-            {filteredStudents.map((student) => (
-              <tr key={student.id}>
-                <td>{student.student_id}</td>
-                <td>{student.name}</td>
-                <td>{student.father_name}</td>
-                <td>{student.class}</td>
-                <td>{student.phone}</td>
-                <td>
-                  <span
-                    className={
-                      student.fee_status === "Paid"
-                        ? "status-paid"
-                        : "status-due"
-                    }
-                  >
-                    {student.fee_status}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    className="delete-btn"
-                    onClick={() => deleteStudent(student.id)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="edit-btn"
-                    onClick={() => openEditModal(student)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                      className="edit-btn"
-                      onClick={() =>
-                        navigate(`/students/${student.id}`)
-                      }
-                    >
-                      View
-                    </button>
-
+            {filteredStudents.length === 0 ? (
+              <tr>
+                <td colSpan="7" style={{ textAlign: "center", color: "var(--muted)", padding: "30px" }}>
+                  No student records found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredStudents.map((student) => (
+                <tr key={student.id}>
+                  <td style={{ fontWeight: "600", color: "#ffffff" }}>{student.student_id}</td>
+                  <td>{student.name}</td>
+                  <td>{student.father_name}</td>
+                  <td>{student.class}</td>
+                  <td>{student.phone}</td>
+                  <td>
+                    <span className={student.fee_status === "Paid" ? "status-paid" : "status-due"}>
+                      {student.fee_status || "Due"}
+                    </span>
+                  </td>
+                  <td>
+                    <button className="view-btn" onClick={() => navigate(`/students/${student.id}`)}>
+                      View
+                    </button>
+                    <button className="edit-btn" onClick={() => openEditModal(student)}>
+                      Edit
+                    </button>
+                    <button className="delete-btn" onClick={() => deleteStudent(student.id)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -274,58 +206,34 @@ const openEditModal = (student) => {
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>{editingStudent ? "Edit Student" : "Add Student"}</h2>
+            <h2>{editingStudent ? "Edit Student Details" : "Add New Student"}</h2>
 
             <input
               type="text"
               placeholder="Student Name"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  name: e.target.value,
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
-              
-              <input
-                placeholder="Roll Number"
-                value={formData.roll_no}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    roll_no: e.target.value,
-                  })
-                }
-              />
 
-              <input
-                placeholder="Course"
-                value={formData.course}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    course: e.target.value,
-                  })
-                }
-              />
+            <input
+              placeholder="Roll Number"
+              value={formData.roll_no}
+              onChange={(e) => setFormData({ ...formData, roll_no: e.target.value })}
+            />
+
+            <input
+              placeholder="Course / Class"
+              value={formData.course}
+              onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+            />
+            
             <div className="modal-actions">
-              <button
-                className="btn-secondary"
-                onClick={() => setShowModal(false)}
-              >
+              <button className="btn-secondary" onClick={() => setShowModal(false)}>
                 Cancel
               </button>
 
-              <button
-                className="btn"
-                onClick={
-                  editingStudent
-                    ? updateStudent
-                    : addStudent
-                }
-              >
-              {editingStudent ? "Update" : "Save"}
+              <button className="btn" onClick={editingStudent ? updateStudent : addStudent}>
+                {editingStudent ? "Update Records" : "Save Record"}
               </button>
             </div>
           </div>

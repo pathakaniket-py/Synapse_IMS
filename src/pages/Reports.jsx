@@ -10,9 +10,9 @@ function Reports() {
       <div className="page-top">
         <button
           className="back-btn"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("-1")}
         >
-          ← Dashboard
+          ← Back
         </button>
       </div>
 

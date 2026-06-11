@@ -1,48 +1,54 @@
-import { NavLink } from "react-router-dom";
-import {
-  FiHome,
-  FiUsers,
-  FiBook,
-  FiDollarSign,
-  FiBarChart2,
-} from "react-icons/fi";
+import { Link, useLocation } from "react-router-dom";
+import { MdDashboard, MdPeople, MdSchool, MdCurrencyRupee, MdAnalytics } from "react-icons/md"; 
+import { RiShieldFlashLine } from "react-icons/ri"; // Premium animated centerpiece logo icon
 
 function MainLayout({ children }) {
+  const location = useLocation();
+
   return (
     <div className="layout">
       <aside className="sidebar">
-        <div>
-          <h2>School ERP</h2>
-
-          <nav>
-            <NavLink to="/" className="nav-link">
-              <FiHome /> Dashboard
-            </NavLink>
-
-            <NavLink to="/students" className="nav-link">
-              <FiUsers /> Students
-            </NavLink>
-
-            <NavLink to="/teachers" className="nav-link">
-              <FiBook /> Teachers
-            </NavLink>
-
-            <NavLink to="/fees" className="nav-link">
-              <FiDollarSign /> Fees
-            </NavLink>
-
-            <NavLink to="/reports" className="nav-link">
-              <FiBarChart2 /> Reports
-            </NavLink>
-          </nav>
+        
+        {/* Centered Gemini-style Brand Emblem */}
+        <div className="logo-container">
+          <div className="logo-icon-glow">
+            <RiShieldFlashLine size={24} color="#818cf8" />
+          </div>
         </div>
 
-        <div className="admin-box">
-          Administrator
-        </div>
+        {/* Clean Icon Stack Navigation */}
+        <nav>
+          <Link to="/" className={`nav-link ${location.pathname === "/" ? "active" : ""}`}>
+            <MdDashboard />
+            <span className="nav-text">Dashboard</span>
+          </Link>
+          
+          <Link to="/students" className={`nav-link ${location.pathname.startsWith("/students") ? "active" : ""}`}>
+            <MdPeople />
+            <span className="nav-text">Students</span>
+          </Link>
+
+          <Link to="/teachers" className={`nav-link ${location.pathname === "/teachers" ? "active" : ""}`}>
+            <MdSchool />
+            <span className="nav-text">Teachers</span>
+          </Link>
+
+          <Link to="/fees" className={`nav-link ${location.pathname === "/fees" ? "active" : ""}`}>
+            <MdCurrencyRupee />
+            <span className="nav-text">Fees</span>
+          </Link>
+
+          <Link to="/reports" className={`nav-link ${location.pathname === "/reports" ? "active" : ""}`}>
+            <MdAnalytics />
+            <span className="nav-text">Reports</span>
+          </Link>
+        </nav>
       </aside>
 
-      <main className="main-content">{children}</main>
+      {/* Main Workspace Frame */}
+      <main className="main-content">
+        {children}
+      </main>
     </div>
   );
 }

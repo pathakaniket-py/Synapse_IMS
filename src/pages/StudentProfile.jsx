@@ -32,57 +32,69 @@ function StudentProfile() {
 
   return (
     <>
-
-        <div className="profile-header">
-      <div className="profile-avatar">
+      <div className="profile-header">
+        <div className="profile-avatar">
           {student.photo_url ? (
-            <img
-              src={student.photo_url}
-              alt={student.student_name}
-            />
+            <img src={student.photo_url} alt={student.student_name} />
           ) : (
             "👨‍🎓"
           )}
-            <button
-              className="btn-secondary"
-              onClick={() => navigate(-1)}
-            >
-              ← Back
-            </button>
-
+          
         </div>
-    
-      <div className="profile-details">
-        <h1>{student.name}</h1>
-    
-        <div className="profile-grid">
-          <p><strong>Student ID:</strong> {student.student_id}</p>
-          <p><strong>Roll No:</strong> {student.roll_no}</p>
-    
-          <p><strong>Course:</strong> {student.course}</p>
-          <p><strong>Admission Date:</strong> {student.admission_date}</p>
-    
-          <p><strong>Father Name:</strong> {student.father_name}</p>
-          <p><strong>Mother Name:</strong> {student.mother_name}</p>
-    
-          <p><strong>Gender:</strong> {student.gender}</p>
-          <p><strong>DOB:</strong> {student.dob}</p>
-    
-          <p><strong>Category:</strong> {student.category}</p>
-          <p><strong>Aadhaar:</strong> {student.aadhaar_no}</p>
-    
-          <p><strong>Mobile:</strong> {student.mobile_no}</p>
-          <p><strong>Father Mobile:</strong> {student.father_mobile_no}</p>
-    
-          <p className="full-width">
-            <strong>Address:</strong> {student.address}
-          </p>
+
+        <div className="profile-details">
+          <h1>{student.name}</h1>
+
+          <div className="profile-grid">
+            <p>
+              <strong>Student ID:</strong> {student.student_id}
+            </p>
+            <p>
+              <strong>Roll No:</strong> {student.roll_no}
+            </p>
+
+            <p>
+              <strong>Course:</strong> {student.course}
+            </p>
+            <p>
+              <strong>Admission Date:</strong> {student.admission_date}
+            </p>
+
+            <p>
+              <strong>Father Name:</strong> {student.father_name}
+            </p>
+            <p>
+              <strong>Mother Name:</strong> {student.mother_name}
+            </p>
+
+            <p>
+              <strong>Gender:</strong> {student.gender}
+            </p>
+            <p>
+              <strong>DOB:</strong> {student.dob}
+            </p>
+
+            <p>
+              <strong>Category:</strong> {student.category}
+            </p>
+            <p>
+              <strong>Aadhaar:</strong> {student.aadhaar_no}
+            </p>
+
+            <p>
+              <strong>Mobile:</strong> {student.mobile_no}
+            </p>
+            <p>
+              <strong>Father Mobile:</strong> {student.father_mobile_no}
+            </p>
+
+            <p className="full-width">
+              <strong>Address:</strong> {student.address}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-        <h2 className="section-title">
-        Fee Summary
-      </h2>
+      <h2 className="section-title">Fee Summary</h2>
 
       <div className="cards">
         <div className="card">

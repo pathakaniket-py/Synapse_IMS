@@ -132,16 +132,7 @@ async function fetchTeachers() {
           </p>
         </div>
 
-        <div className="page-top">
           <button
-            className="back-btn"
-            onClick={() => navigate("/")}
-          >
-            ← Dashboard
-          </button>
-        </div>
-
-        <button
           className="btn"
           onClick={() => {
           setEditingTeacher(null);
