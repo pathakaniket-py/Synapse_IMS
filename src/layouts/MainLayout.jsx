@@ -9,7 +9,7 @@ function MainLayout({ children }) {
     <div className="layout">
       <aside className="sidebar">
         
-        {/* Centered Gemini-style Brand Emblem */}
+        {/* Centered GBrand Emblem */}
         <div className="logo-container">
           <div className="logo-icon-glow">
             <RiShieldFlashLine size={24} color="#818cf8" />

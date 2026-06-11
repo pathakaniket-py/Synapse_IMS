@@ -61,7 +61,7 @@ function Dashboard() {
 
   return (
     <>
-      {/* BRAND NAME & DESCRIPTION MOVED TO THE TOP FRONT */}
+      {/* BRAND NAME & DESCRIPTION  */}
       <div className="page-header" style={{ marginBottom: "40px" }}>
         <div>
           <h1 className="page-title" style={{ fontSize: "32px", fontWeight: "900", letterSpacing: "-0.5px" }}>
@@ -118,7 +118,7 @@ function Dashboard() {
           <MdAddCard style={{ fontSize: "18px" }} /> Receive Fee Payment
         </button>
         <button className="theme-btn" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "16px", marginTop: 0 }} onClick={() => navigate("/reports")}>
-          <MdAnalytics style={{ fontSize: "18px" }} /> Audit Ledger Reports
+          <MdAnalytics style={{ fontSize: "18px" }} /> Generate Bill / Invoice
         </button>
       </div>
 

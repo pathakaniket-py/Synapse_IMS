@@ -14,7 +14,7 @@ function StudentProfile() {
   }, [id]);
 
   async function fetchStudent() {
-    // Safety check: Don't run the query if id is missing or undefined
+    // Safety check:thsi wiil not run the query if id is missing or undefined
     if (!id || id === "undefined") {
       console.warn("Aborted profile fetch: ID is undefined.");
       return;

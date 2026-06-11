@@ -115,7 +115,7 @@ function Admission() {
 
       <form onSubmit={handleSubmit} style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
         
-        {/* PHOTO UPLOAD BLOCK */}
+        {/* PHOTO UPLOAD  */}
         <div className="card" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <div className="profile-avatar" style={{ borderRadius: "16px", width: "80px", height: "80px", display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(255,255,255,0.03)", overflow: "hidden" }}>
             {previewUrl ? <img src={previewUrl} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📸"}
@@ -132,23 +132,23 @@ function Admission() {
           <div className="profile-grid">
             <div>
               <strong>Full Name *</strong>
-              <input type="text" name="student_name" value={formData.student_name} onChange={handleChange} required placeholder="John Doe" />
+              <input type="text" name="student_name" value={formData.student_name} onChange={handleChange} required />
             </div>
             <div>
               <strong>Father's Name</strong>
-              <input type="text" name="father_name" value={formData.father_name} onChange={handleChange} placeholder="Alex Doe" />
+              <input type="text" name="father_name" value={formData.father_name} onChange={handleChange} required  />
             </div>
             <div>
               <strong>Mother's Name</strong>
-              <input type="text" name="mother_name" value={formData.mother_name} onChange={handleChange} placeholder="Mary Doe" />
+              <input type="text" name="mother_name" value={formData.mother_name} onChange={handleChange}  />
             </div>
             <div>
               <strong>Date of Birth</strong>
-              <input type="date" name="dob" value={formData.dob} onChange={handleChange} />
+              <input type="date" name="dob" value={formData.dob} onChange={handleChange} required />
             </div>
             <div>
               <strong>Gender</strong>
-              <input type="text" name="gender" value={formData.gender} onChange={handleChange} placeholder="Male / Female / Other" />
+              <input type="text" name="gender" value={formData.gender} onChange={handleChange} required placeholder="Male / Female / Others" />
             </div>
             <div>
               <strong>Category</strong>
@@ -163,11 +163,11 @@ function Admission() {
           <div className="profile-grid">
             <div>
               <strong>Primary Mobile Number</strong>
-              <input type="tel" name="mobile_no" value={formData.mobile_no} onChange={handleChange} placeholder="9999999999" />
+              <input type="tel" name="mobile_no" value={formData.mobile_no} onChange={handleChange} required />
             </div>
             <div>
               <strong>Guardian Mobile Number</strong>
-              <input type="tel" name="father_mobile_no" value={formData.father_mobile_no} onChange={handleChange} placeholder="8888888888" />
+              <input type="tel" name="father_mobile_no" value={formData.father_mobile_no} onChange={handleChange}  />
             </div>
             <div>
               <strong>Aadhaar Card Number</strong>
