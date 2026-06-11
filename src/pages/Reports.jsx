@@ -46,36 +46,41 @@ function Reports() {
 
   // PURE BILL PRINT CONTROLLER ENGINE by Ai 
 
-  const handlePrintReceipt = () => {
-    // 1. Target the DOM container block of our printable receipt element
-    const printContents = document.getElementById(
-      "printable-receipt-canvas",
-    ).innerHTML;
-
-    // 2. Opens a completely empty, temporary browser shell window
-    const printWindow = window.open("", "_blank", "width=800,height=900");
-
-    // 3. Document writes the core structure, styles, and data rows directly into the frame
-    printWindow.document.write(`
+ const handlePrintReceipt = () => {
+    // 1. Grab the clean bill structural HTML layout
+    const printContents = document.getElementById("printable-receipt-canvas").innerHTML;
+    
+    // 2. Look for an existing hidden frame or create a brand new one dynamically
+    let printFrame = document.getElementById("mobile-print-frame");
+    if (!printFrame) {
+      printFrame = document.createElement("iframe");
+      printFrame.id = "mobile-print-frame";
+      // Position it safely off-screen so user never sees layout stuttering
+      printFrame.style.position = "fixed";
+      printFrame.style.right = "0";
+      printFrame.style.bottom = "0";
+      printFrame.style.width = "0";
+      printFrame.style.height = "0";
+      printFrame.style.border = "none";
+      document.body.appendChild(printFrame);
+    }
+    
+    const frameDoc = printFrame.contentWindow || printFrame.contentDocument;
+    const doc = frameDoc.document || frameDoc;
+    
+    // 3. Write styling layout blocks inside the frame context cleanly
+    doc.open();
+    doc.write(`
       <html>
         <head>
-          <title>Fee Receipt Invoice — ${selectedStudent.student_id}</title>
+          <title>Fee Receipt Invoice</title>
           <style>
-            @page {
-              size: A4 portrait;
-              margin: 15mm;
-            }
             body {
               font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
               color: #000000;
               background: #ffffff;
+              padding: 20px;
               margin: 0;
-              padding: 0;
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
-            }
-            .invoice-wrapper {
-              padding: 10px;
             }
             table {
               width: 100%;
@@ -88,54 +93,33 @@ function Reports() {
               padding: 12px;
               text-align: left;
               font-size: 13px;
-              font-weight: 600;
-              border: 1px solid #111827;
             }
             td {
               padding: 12px;
               font-size: 13px;
               border-bottom: 1px solid #e5e7eb;
             }
-            .row-highlight-payable {
-              background: #f3f4f6 !important;
-              font-weight: bold;
-            }
-            .row-highlight-paid {
-              background: #ecfdf5 !important;
-              color: #047857 !important;
-              font-weight: bold;
-              border-top: 2px solid #047857;
-            }
-            .row-highlight-dues {
-              background: #fef2f2 !important;
-              color: #b91c1c !important;
-              font-weight: bold;
-              border-top: 1px dashed #6b7280;
-            }
-            .settled-text {
-              color: #15803d !important;
-              background: #f0fdf4 !important;
+            /* Webkit engines background optimizations */
+            * {
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
             }
           </style>
         </head>
         <body>
-          <div class="invoice-wrapper">
-            ${printContents}
-          </div>
-          <script>
-            // Automatically prompt the print manager, then close the hidden shell frame
-            window.onload = function() {
-              window.print();
-              setTimeout(function() { window.close(); }, 100);
-            };
-          <\/script>
+          <div>${printContents}</div>
         </body>
       </html>
     `);
-
-    printWindow.document.close();
+    doc.close();
+    
+    // 4. Trigger print manager context on frame element directly
+    setTimeout(() => {
+      printFrame.contentWindow.focus();
+      printFrame.contentWindow.print();
+    }, 250);
   };
-
+  
   const totalFee = Number(selectedStudent?.total_fee || 0);
   const otherFee = Number(selectedStudent?.other_fee || 0);
   const discountFee = Number(selectedStudent?.discount_fee || 0);

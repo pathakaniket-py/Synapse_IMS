@@ -42,9 +42,7 @@ body {
   min-height: 100vh;
 }
 
-/* ==========================================================================
-   SIDEBAR (Compact Only Icons - Hover to Expand Sidebar)
-   ========================================================================== */
+/* SIDEBAR  Only Icons - Hover to Expand Sidebar */
 
 .sidebar {
   width: 78px; /* Default narrow state showing only icons */
@@ -66,14 +64,6 @@ body {
   width: 260px;
   padding: 30px 18px;
 }
-
-/* ==========================================================================
-   LOGO HEADER (Centered with Breathing Animation)
-   ========================================================================== */
-
-/* ==========================================================================
-   LOGO HEADER (Centering & Dynamic Collapse Mode)
-   ========================================================================== */
 
 .logo-container {
   display: flex;
@@ -126,9 +116,8 @@ body {
     transform: scale(1.05);
   }
 }
-/* ==========================================================================
-   NAVIGATION LINKS
-   ========================================================================== */
+/*    NAVIGATION LINKS
+   */
 
 nav {
   display: flex;
@@ -193,11 +182,6 @@ nav {
 .nav-link.active svg {
   color: #818cf8;
 }
-
-/* ==========================================================================
-   ADMIN BOX BLOCK AT BASE
-   ========================================================================== */
-
 .admin-box {
   margin-top: auto;
   padding: 14px;
@@ -218,10 +202,6 @@ nav {
   opacity: 1;
   transform: translateY(0);
 }
-/* ==========================================================================
-   MAIN CONTENT & HEADERS
-   ========================================================================== */
-
 .main-content {
   flex: 1;
   padding: 40px;
@@ -249,11 +229,6 @@ nav {
   color: var(--muted);
   font-size: 14px;
 }
-
-/* ==========================================================================
-   CARDS
-   ========================================================================== */
-
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -293,11 +268,6 @@ nav {
   font-weight: 700;
   color: #ffffff;
 }
-
-/* ==========================================================================
-   SEARCH BOX
-   ========================================================================== */
-
 .search-box {
   margin: 24px 0;
 }
@@ -324,10 +294,6 @@ nav {
 .search-box input::placeholder {
   color: #475569;
 }
-
-/* ==========================================================================
-   TABLES
-   ========================================================================== */
 
 .table-container {
   background: var(--card);
@@ -370,11 +336,6 @@ tr:last-child td {
 tr:hover {
   background: rgba(255, 255, 255, 0.015);
 }
-
-/* ==========================================================================
-   STATUS BADGES
-   ========================================================================== */
-
 .status-paid {
   background: rgba(34, 197, 94, 0.1);
   color: #4ade80;
@@ -397,11 +358,7 @@ tr:hover {
   display: inline-block;
 }
 
-/* ==========================================================================
-   BUTTONS
-   ========================================================================== */
-
-/* Main Action CTA Button (Fixes clipping from your screenshot) */
+/* Main Action CTA Button  */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -484,11 +441,6 @@ tr:hover {
 .theme-btn:hover {
   background: rgba(255, 255, 255, 0.06);
 }
-
-/* ==========================================================================
-   MODAL SYSTEMS
-   ========================================================================== */
-
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -558,10 +510,6 @@ tr:hover {
   background: #475569;
 }
 
-/* ==========================================================================
-   DROPDOWNS & AUTOCOMPLETE
-   ========================================================================== */
-
 .student-dropdown {
   margin-top: 8px;
   border-radius: 12px;
@@ -584,10 +532,6 @@ tr:hover {
   background: rgba(99, 102, 241, 0.1);
   color: #a5b4fc;
 }
-
-/* ==========================================================================
-   STUDENT PROFILE VIEW
-   ========================================================================== */
 
 .profile-header {
   background: var(--card);
@@ -708,4 +652,53 @@ tr:hover {
 .table-container tbody tr:hover {
   cursor: pointer;
   background: rgba(255, 255, 255, 0.02) !important;
+}
+@media (max-width: 768px) {
+
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 12px;
+  }
+
+  .main-content {
+    padding: 16px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-meta,
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 800px;
+  }
+
+  .search-box input {
+    width: 100%;
+    max-width: none;
+  }
 }
