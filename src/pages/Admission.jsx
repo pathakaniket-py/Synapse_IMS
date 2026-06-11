@@ -5,7 +5,9 @@ import { supabase } from "../services/supabase";
 function Admission() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+
   const [formData, setFormData] = useState({
     student_name: "",
     father_name: "",
@@ -23,7 +25,6 @@ function Admission() {
     total_fee: "",
     other_fee: "",
     discount_fee: "",
-    photo_url: "",
   });
 
   const handleChange = (e) => {
@@ -31,78 +32,101 @@ function Admission() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.student_name || !formData.course) {
-      alert("Student Name and Course/Class are strictly required fields.");
+      alert("Student Name and Course/Class are required!");
       return;
     }
 
     setLoading(true);
-    const studentCode = `ST${Date.now()}`;
+    let publicPhotoUrl = "";
 
-    const { error } = await supabase.from("students").insert([
-      {
-        student_id: studentCode,
-        name: formData.student_name, // maps to table column schema
-        father_name: formData.father_name,
-        mother_name: formData.mother_name,
-        dob: formData.dob,
-        gender: formData.gender,
-        category: formData.category,
-        phone: formData.mobile_no, // maps to phone column track
-        address: formData.address,
-        class: formData.course, // maps to class column track
-        roll_no: formData.roll_no,
-        admission_date: formData.admission_date,
-        total_fee: Number(formData.total_fee || 0),
-        other_fee: Number(formData.other_fee || 0),
-        discount_fee: Number(formData.discount_fee || 0),
-        fee_status: "Due"
-      },
-    ]);
+    try {
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `student-photos/${fileName}`;
 
-    setLoading(false);
+        const { error: uploadError } = await supabase.storage
+          .from("avatars")
+          .upload(filePath, imageFile);
 
-    if (error) {
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+        publicPhotoUrl = data.publicUrl;
+      }
+
+      const studentCode = `ST${Date.now()}`;
+      const { error: insertError } = await supabase.from("students").insert([
+        {
+          student_id: studentCode,
+          name: formData.student_name,
+          father_name: formData.father_name,
+          mother_name: formData.mother_name,
+          dob: formData.dob,
+          gender: formData.gender,
+          category: formData.category,
+          aadhaar_no: formData.aadhaar_no,
+          phone: formData.mobile_no,
+          father_mobile_no: formData.father_mobile_no,
+          address: formData.address,
+          class: formData.course, // Maps to 'class' column in Supabase
+          roll_no: formData.roll_no,
+          admission_date: formData.admission_date,
+          total_fee: Number(formData.total_fee || 0),
+          other_fee: Number(formData.other_fee || 0),
+          discount_fee: Number(formData.discount_fee || 0),
+          photo_url: publicPhotoUrl,
+          fee_status: "Due"
+        },
+      ]);
+
+      if (insertError) throw insertError;
+
+      alert("Student Profile Registered Successfully!");
+      navigate("/students");
+
+    } catch (error) {
       console.error(error);
-      alert(`Database insertion fault: ${error.message}`);
-      return;
+      alert(`Operation Failed: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
-
-    alert("Student Profile Registered Successfully!");
-    navigate("/students");
   };
 
   return (
     <>
       <div className="page-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <button className="back-btn" onClick={() => navigate("/students")}>
-          ← Back to Student Records
+          ← Back to Directory
         </button>
-        <div>
-          <h1 className="page-title" style={{ fontSize: "26px", margin: 0 }}>New Admission Registration</h1>
-        </div>
+        <h1 className="page-title" style={{ fontSize: "24px", margin: 0 }}>New Admission Registration</h1>
       </div>
 
       <form onSubmit={handleSubmit} style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
         
-        {/* SECTION 1: PHOTO */}
+        {/* PHOTO UPLOAD BLOCK */}
         <div className="card" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <div className="profile-avatar" style={{ fontSize: "32px", borderRadius: "16px", width: "80px", height: "80px" }}>
-            📸
+          <div className="profile-avatar" style={{ borderRadius: "16px", width: "80px", height: "80px", display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(255,255,255,0.03)", overflow: "hidden" }}>
+            {previewUrl ? <img src={previewUrl} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📸"}
           </div>
           <div>
             <h3 style={{ marginBottom: "6px" }}>Student Profile Image</h3>
-            <input 
-              type="file" 
-              accept="image/*" 
-              style={{ background: "transparent", border: "none", padding: 0 }} 
-            />
+            <input type="file" accept="image/*" onChange={handleFileChange} style={{ background: "transparent", border: "none", padding: 0 }} />
           </div>
         </div>
 
-        {/* SECTION 2: PERSONAL IDENTITY */}
+        {/* PERSONAL DETAILS */}
         <div className="card">
           <h3>Personal Details</h3>
           <div className="profile-grid">
@@ -133,9 +157,9 @@ function Admission() {
           </div>
         </div>
 
-        {/* SECTION 3: COMMUNICATIONS */}
+        {/* COMMUNICATIONS */}
         <div className="card">
-          <h3>Contact</h3>
+          <h3>Contact & Identity Credentials</h3>
           <div className="profile-grid">
             <div>
               <strong>Primary Mobile Number</strong>
@@ -145,24 +169,28 @@ function Admission() {
               <strong>Guardian Mobile Number</strong>
               <input type="tel" name="father_mobile_no" value={formData.father_mobile_no} onChange={handleChange} placeholder="8888888888" />
             </div>
-             <div className="full-width">
+            <div>
+              <strong>Aadhaar Card Number</strong>
+              <input type="text" name="aadhaar_no" value={formData.aadhaar_no} onChange={handleChange} placeholder="0000-0000-0000" />
+            </div>
+            <div className="full-width">
               <strong>Permanent Residential Address</strong>
-              <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Street, City, Postal State Code" />
+              <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Street, City, State" />
             </div>
           </div>
         </div>
 
-        {/* SECTION 4: ACADEMIC PROFILE */}
+        {/* ACADEMIC PROFILE */}
         <div className="card">
           <h3>Academic Information</h3>
           <div className="profile-grid">
             <div>
               <strong>Course / Class Assigned *</strong>
-              <input type="text" name="course" value={formData.course} onChange={handleChange} required placeholder="Computer Science 101" />
+              <input type="text" name="course" value={formData.course} onChange={handleChange} required placeholder="Class 10(B)" />
             </div>
             <div>
               <strong>Class Roll Number</strong>
-              <input type="text" name="roll_no" value={formData.roll_no} onChange={handleChange} placeholder="BTech-04" />
+              <input type="text" name="roll_no" value={formData.roll_no} onChange={handleChange} placeholder="05" />
             </div>
             <div>
               <strong>Date of Admission</strong>
@@ -171,7 +199,7 @@ function Admission() {
           </div>
         </div>
 
-        {/* SECTION 5: FINANCIAL BALANCE FEES */}
+        {/* FINANCIAL BALANCE FEES */}
         <div className="card">
           <h3>Fee Structures</h3>
           <div className="profile-grid">
@@ -190,13 +218,13 @@ function Admission() {
           </div>
         </div>
 
-        {/* FORM CONTROLS EXECUTION ACTIONS */}
+        {/* EXECUTION ACTIONS */}
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "16px", marginBottom: "40px" }}>
           <button type="button" className="btn-secondary" style={{ padding: "12px 24px" }} onClick={() => navigate("/students")}>
-            Cancel Registration
+            Cancel
           </button>
           <button type="submit" className="btn" style={{ padding: "12px 32px" }} disabled={loading}>
-            {loading ? "Processing..." : "Finalize Admission"}
+            {loading ? "Uploading Profile..." : "Finalize Admission"}
           </button>
         </div>
       </form>
