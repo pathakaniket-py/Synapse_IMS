@@ -1,27 +1,60 @@
 # Synapse IMS — Institute Management System
+![Dashboard](dashboard-1.png)
+Synapse IMS is a full-stack web application built to simplify student administration, fee management, and institutional record keeping for coaching centers and educational institutes.
 
-A high-performance, mobile-responsive web application engineered to manage student directories, automate transactional ledger bookkeeping, and generate dynamic standalone financial invoices. 
+## Features
 
----
+### Student Management
 
-## 💎 Core Architectured Features
+* Student admission and profile management
+* Student directory with search and filtering
+* Academic and personal information tracking
 
-### 1. Smart Fees Ledger Ledger
-* **On-the-Spot Ledger Tracking:** Log student course fees, supplemental lab/extracurricular charges, and custom institutional scholarship concessions or waivers in real-time.
-* **Isolated Transactions History:** Maintains a dedicated history grid separate from reporting screens to guarantee data integrity.
+### Fee Management
 
-### 2. Mobile-Agnostic Reports & Receipt Generator
-* **Live Directory Autocomplete:** Asynchronous quick-search indexing that fetches matches from the Supabase registry via names or unique Student IDs instantly.
-* **Hidden Dynamic Engine:** Bypasses aggressive desktop pop-up blockers and mobile layout constraints (iOS Safari & Android Chrome) to isolate only the target invoice graphics context.
-* **Strict Black & White High-Fidelity Rendering:** Automatically masks dark interface backgrounds, navigation bars, and buttons when printing, producing a clean, structured financial voucher.
+* Course fee tracking
+* Additional charges and discounts management
+* Remaining balance calculation
+* Payment history records
 
-## 🛠️ Technology Stack & Dependencies
+### Receipt & Reporting
 
-* **Frontend Engine:** React.js 
-* **Database Backend:** Supabase (PostgreSQL with built-in Row-Level Security)
-* **Icons Toolkit:** `react-icons` (Material Design & Remix Icon sets)
-* **Deployment Middleware:** Vercel Hosting Engine
-* **Git:** To maintain version control
+* Printable fee receipts as pdf
+* Mobile-friendly invoice generation
+* Student payment reports
 
----
+### Teacher Management
 
+* Teacher directory
+* Salary record management
+* Teacher information tracking
+
+### Dashboard
+
+* Student statistics
+* Revenue overview
+* Pending fee tracking
+* Quick-access tools
+
+## Technology Stack
+
+**Frontend**
+
+* React.js
+* CSS
+
+**Backend**
+
+* Supabase
+* PostgreSQL
+
+**Other Tools**
+* Node.js
+* Git & GitHub
+
+## Future Improvements
+
+* Authentication and role-based access
+* Advanced analytics dashboard
+* Attendance management
+* Mobile app support
