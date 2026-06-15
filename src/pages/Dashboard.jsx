@@ -65,7 +65,8 @@ function Dashboard() {
       <div className="page-header" style={{ marginBottom: "40px" }}>
         <div>
           <h1 className="page-title" style={{ fontSize: "32px", fontWeight: "900", letterSpacing: "-0.5px" }}>
-            Synapse IMS <span style={{ fontSize: "14px", fontWeight: "600", padding: "4px 8px", background: "rgba(99, 102, 241, 0.15)", color: "#a5b4fc", borderRadius: "6px", marginLeft: "8px", verticalAlign: "middle" }}>v1.0.0</span>
+            Synapse IMS <span style={{ fontSize: "14px", fontWeight: "600", padding: "4px 8px", background: "rgba(99, 102, 241, 0.15)", color: "#a5b4fc", borderRadius: "6px", marginLeft: "8px", verticalAlign: "middle" }}>
+              v1.0.3</span>
           </h1>
           <p className="page-subtitle" style={{ fontSize: "15px", marginTop: "6px", color: "var(--muted)" }}>
             Automated Working System — Real-time oversight, automated revenue, and registry auditing.
@@ -109,7 +110,8 @@ function Dashboard() {
       </div>
 
       {/* SYSTEM CONTROLS SHORTCUTS */}
-      <h3 style={{ color: "#ffffff", fontSize: "16px", marginBottom: "16px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px" }}>System Command Shortcuts</h3>
+      <h3 style={{ color: "#ffffff", fontSize: "16px", marginBottom: "16px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+        System Command Shortcuts</h3>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "40px" }}>
         <button className="theme-btn" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "16px", marginTop: 0 }} onClick={() => navigate("/admission")}>
           <MdPersonAdd style={{ fontSize: "18px" }} /> Start New Admission
@@ -141,7 +143,8 @@ function Dashboard() {
               </thead>
               <tbody>
                 {recentStudents.length === 0 ? (
-                  <tr><td colSpan="4" style={{ textAlign: "center", color: "var(--muted)", padding: "20px" }}>No recent entries found.</td></tr>
+                  <tr><td colSpan="4" style={{ textAlign: "center", color: "var(--muted)", padding: "20px" }}>
+                    No recent entries found.</td></tr>
                 ) : (
                   recentStudents.map((student) => (
                     <tr key={student.id} onClick={() => navigate(`/students/${student.id}`)}>

@@ -9,13 +9,13 @@ import Teachers from "./pages/Teachers";
 import Fees from "./pages/Fees";
 import Reports from "./pages/Reports";
 
-
 function App() {
   return (
     <BrowserRouter>
       <MainLayout>
         <Routes>
           <Route path="/admission" element={<Admission />} />
+          <Route path="/admission/:id" element={<Admission />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/students" element={<Students />} />
           <Route path="/students/:id" element={<StudentProfile />} />
