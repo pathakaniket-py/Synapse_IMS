@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
+import { useNavigate } from "react-router-dom";
 import {
   MdAddCard,
   MdReceiptLong,
@@ -19,6 +20,7 @@ function Fees() {
   const [studentSearchInput, setStudentSearchInput] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedStudentDues, setSelectedStudentDues] = useState(0);
+  const navigate = useNavigate();
 
   // Modal Form State Tracking
   const [formData, setFormData] = useState({
@@ -202,27 +204,18 @@ function Fees() {
         <div>
           <h1 className="page-title">Fees & Accounts Workspace</h1>
           <p className="page-subtitle">
-            Process incoming clearings, audit real-time transaction receipts,
-            and track outstandings
+            Process and track transaction receipts / bills
           </p>
         </div>
+        <div className="header-actions">
+          <button className="glass-btn" onClick={() => navigate("/reports")}>
+            Print Bill
+          </button>
 
-        <button
-          className="theme-btn"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            marginTop: "4px",
-            padding: "12px 20px",
-            width:
-              "max-content" /* Strict instruction to not stretch across screen */,
-            whiteSpace: "nowrap" /* Prevents layout word wrapping */,
-          }}
-          onClick={() => setShowModal(true)}
-        >
-          <MdAddCard style={{ fontSize: "18px" }} /> Collect Payment Receipt
-        </button>
+          <button className="collect-btn" onClick={() => setShowModal(true)}>
+            + Collect Payment
+          </button>
+        </div>
       </div>
 
       {/* FILTER SEARCH FIELD FOR LEDGER TABLE */}
@@ -262,8 +255,8 @@ function Fees() {
               <th>Payer Name</th>
               <th>Class/Course</th>
               <th>Payment Date</th>
-              <th>Amount Transacted</th>
-              <th>Remaining Dues Balance</th>
+              <th>Amount Paid</th>
+              <th>Dues</th>
             </tr>
           </thead>
           <tbody>

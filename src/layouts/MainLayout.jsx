@@ -79,7 +79,7 @@ function MainLayout({ children }) {
             onClick={closeSidebarOnMobile}
           >
             <MdAnalytics />
-            <span className="nav-text">Reports</span>
+            <span className="nav-text">Billing</span>
           </Link>
         </nav>
       </aside>

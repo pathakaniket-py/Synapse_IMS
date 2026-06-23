@@ -149,7 +149,7 @@ function Reports() {
             className="page-title"
             style={{ display: "flex", alignItems: "center", gap: "10px" }}
           >
-            <MdAssessment style={{ color: "#818cf8" }} /> Student Billing
+            <MdAssessment style={{ color: "#818cf8" }} /> Student Billing &
             Reports
           </h1>
         </div>
