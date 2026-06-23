@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import MainLayout from "./layouts/MainLayout";
 import StudentProfile from "./pages/StudentProfile";
 import Dashboard from "./pages/Dashboard";
@@ -14,11 +13,11 @@ function App() {
     <BrowserRouter>
       <MainLayout>
         <Routes>
-          <Route path="/admission" element={<Admission />} />
-          <Route path="/admission/:id" element={<Admission />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/students" element={<Students />} />
           <Route path="/students/:id" element={<StudentProfile />} />
+          <Route path="/admission" element={<Admission />} />
+          <Route path="/admission/:id" element={<Admission />} />
           <Route path="/teachers" element={<Teachers />} />
           <Route path="/fees" element={<Fees />} />
           <Route path="/reports" element={<Reports />} />

@@ -1,81 +1,96 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { MdDashboard, MdPeople, MdSchool, MdCurrencyRupee, MdAnalytics } from "react-icons/md"; 
-import { RiShieldFlashLine } from "react-icons/ri"; 
+import {
+  MdDashboard,
+  MdPeople,
+  MdSchool,
+  MdCurrencyRupee,
+  MdAnalytics,
+} from "react-icons/md";
+import { RiShieldFlashLine } from "react-icons/ri";
 
 function MainLayout({ children }) {
   const location = useLocation();
-  
-  //  Mobile me sidebar ko handle karne ki state (shuru me close rahega)
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  //  Function: Koi bhi page link click hote hi mobile me sidebar chup jayega
   const closeSidebarOnMobile = () => {
     setIsMobileOpen(false);
   };
 
   return (
     <div className="layout">
-      
-      {/*  Floating Toggle Button: Yeh sirf mobile par dikhega, layout ko bina touch kiye */}
-      <button 
+      {/* Mobile Menu Button */}
+      <button
         className="mobile-menu-toggle-trigger"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
         {isMobileOpen ? "✕ Menu" : "☰ Menu"}
       </button>
 
-      {/*  Sidebar */}
-      <aside className={`sidebar ${isMobileOpen ? "mobile-expanded" : "mobile-collapsed"}`}>
-        
-        {/* Centered GBrand Emblem */}
+      {/* Sidebar */}
+      <aside
+        className={`sidebar ${
+          isMobileOpen ? "mobile-expanded" : "mobile-collapsed"
+        }`}
+      >
+        {/* Logo */}
         <div className="logo-container">
           <div className="logo-icon-glow">
             <RiShieldFlashLine size={24} color="#818cf8" />
           </div>
         </div>
 
-        {/* Clean Icon Stack Navigation */}
+        {/* Navigation */}
         <nav>
-          <Link 
-            to="/" 
-            className={`nav-link ${location.pathname === "/" ? "active" : ""}`}
+          <Link
+            to="/"
+            className={`nav-link ${
+              location.pathname === "/" ? "active" : ""
+            }`}
             onClick={closeSidebarOnMobile}
           >
             <MdDashboard />
             <span className="nav-text">Dashboard</span>
           </Link>
-          
-          <Link 
-            to="/students" 
-            className={`nav-link ${location.pathname.startsWith("/students") ? "active" : ""}`}
+
+          <Link
+            to="/students"
+            className={`nav-link ${
+              location.pathname.startsWith("/students") ? "active" : ""
+            }`}
             onClick={closeSidebarOnMobile}
           >
             <MdPeople />
             <span className="nav-text">Students</span>
           </Link>
 
-          <Link 
-            to="/teachers" 
-            className={`nav-link ${location.pathname === "/teachers" ? "active" : ""}`}
+          <Link
+            to="/teachers"
+            className={`nav-link ${
+              location.pathname === "/teachers" ? "active" : ""
+            }`}
             onClick={closeSidebarOnMobile}
           >
             <MdSchool />
             <span className="nav-text">Teachers</span>
           </Link>
 
-          <Link 
-            to="/fees" 
-            className={`nav-link ${location.pathname === "/fees" ? "active" : ""}`}
+          <Link
+            to="/fees"
+            className={`nav-link ${
+              location.pathname === "/fees" ? "active" : ""
+            }`}
             onClick={closeSidebarOnMobile}
           >
             <MdCurrencyRupee />
             <span className="nav-text">Fees</span>
           </Link>
 
-          <Link 
-            to="/reports" 
-            className={`nav-link ${location.pathname === "/reports" ? "active" : ""}`}
+          <Link
+            to="/reports"
+            className={`nav-link ${
+              location.pathname === "/reports" ? "active" : ""
+            }`}
             onClick={closeSidebarOnMobile}
           >
             <MdAnalytics />
@@ -84,7 +99,7 @@ function MainLayout({ children }) {
         </nav>
       </aside>
 
-      {/* Main Workspace Frame */}
+      {/* Main Content */}
       <main className="main-content">
         {children}
       </main>
