@@ -373,7 +373,7 @@ function Admission() {
               />
             </div>
             <div>
-              <strong>Class Roll Number</strong>
+              <strong>Admission No.</strong>
               <input
                 type="text"
                 name="roll_no"
