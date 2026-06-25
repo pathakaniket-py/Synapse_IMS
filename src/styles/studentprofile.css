@@ -1,72 +1,185 @@
-.profile-header {
+/* STUDENT PROFILE LAYOUT */
+.student-dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px;
+  align-items: stretch; 
+  margin-top: 20px;
+}
+.student-card,
+.current-fee-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 32px;
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  margin-bottom: 30px;
+  border-radius: 18px;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
-.profile-avatar {
-  width: 96px;
-  height: 96px;
-  border-radius: 24px;
-  overflow: hidden;
+.student-photo {
+  width: 120px;
+  height: 140px;
+  border-radius: 8px; 
   background: var(--accent-gradient);
+  overflow: hidden;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   flex-shrink: 0;
-  font-size: 40px;
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+  font-size: 34px;
+  font-weight: 700;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.profile-avatar img {
+.student-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.profile-details h1 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #ffffff;
+.student-basic {
+  flex: 1;
 }
 
-.profile-meta {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(180px, 1fr));
-  gap: 12px 30px;
-  margin-top: 14px;
+.student-basic h2 {
+  font-size: 26px;
+  margin: 0 0 12px 0;
+  color: white;
 }
 
-.profile-meta p {
+.student-basic p {
+  margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  line-height: 1.4;
 }
 
-.profile-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
-  gap: 16px 28px;
+.student-basic strong {
+  font-size: 11px;
+  color: #8a94a6;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fee-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fee-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, .05);
+}
+
+.fee-row:last-child {
+  border-bottom: none; 
+  padding-bottom: 0;
+}
+
+.fee-row span {
+  color: var(--muted);
+}
+
+.fee-row strong {
+  color: white;
+  font-size: 16px;
+}
+
+.due-text {
+  color: #ff4d4f !important; 
+}
+
+.status-badge,
+.status {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+}
+
+.status.paid,
+.status-badge.paid {
+  background: rgba(34, 197, 94, .15);
+  color: #22c55e;
+}
+
+.status.partial,
+.status-badge.partial {
+  background: rgba(251, 191, 36, .15);
+  color: #facc15;
+}
+
+.status.unpaid,
+.status-badge.unpaid {
+  background: rgba(239, 68, 68, .15);
+  color: #ef4444;
+}
+
+/* LEDGER COMPONENT */
+.ledger-card {
   margin-top: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
 }
 
-.profile-grid p {
-  font-size: 14px;
+.ledger-title {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ledger-table th {
+  padding: 16px;
+  text-align: left;
+  background: rgba(255, 255, 255, .02);
+  color: #8a94a6;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ledger-table td {
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, .05);
   color: var(--muted);
-  line-height: 1.6;
+  font-size: 14px;
 }
 
-.profile-grid strong {
-  color: var(--text);
-  display: block;
-  font-size: 15px;
-  margin-bottom: 4px;
+.ledger-table tr:hover {
+  background: rgba(255, 255, 255, .02);
 }
 
-.full-width {
-  grid-column: 1 / -1;
+/* MOBILE MEDIA QUERY VIEWPORTS */
+@media (max-width: 1100px) {
+  .student-dashboard {
+    grid-template-columns: 1fr; 
+  }
+}
+
+@media(max-width: 700px) {
+  .student-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .student-photo {
+    width: 110px;
+    height: 120px;
+  }
 }

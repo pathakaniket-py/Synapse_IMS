@@ -398,7 +398,7 @@ function Admission() {
           <h3>Fee Structures</h3>
           <div className="profile-grid">
             <div>
-              <strong>Standard Course Fee (₹)</strong>
+              <strong>Monthly Fee (₹)</strong>
               <input
                 type="number"
                 name="total_fee"
@@ -417,7 +417,7 @@ function Admission() {
               />
             </div>
             <div>
-              <strong>Granted Concession / Discount (₹)</strong>
+              <strong>Concession / Discount (₹)</strong>
               <input
                 type="number"
                 name="discount_fee"
