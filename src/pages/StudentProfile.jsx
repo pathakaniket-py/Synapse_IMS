@@ -152,7 +152,7 @@ function StudentProfile() {
               </p>
 
               <p style={{ margin: 0, gridColumn: "span 2" }}>
-                <strong style={{ fontSize: "11px", color: "#8a94a6" }}>Course</strong>
+                <strong style={{ fontSize: "11px", color: "#8a94a6" }}>Class</strong>
                 <br />
                 {student.class || "--"}
               </p>

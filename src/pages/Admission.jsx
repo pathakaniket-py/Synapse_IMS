@@ -25,7 +25,7 @@ function Admission() {
     admission_date: new Date().toISOString().split("T")[0],
     total_fee: "",
     other_fee: "",
-    discount_fee: "",
+    
   });
   useEffect(() => {
     if (id) {
@@ -61,7 +61,7 @@ function Admission() {
       admission_date: data.admission_date || "",
       total_fee: data.total_fee || "",
       other_fee: data.other_fee || "",
-      discount_fee: data.discount_fee || "",
+    
     });
 
     if (data.photo_url) {
@@ -125,8 +125,7 @@ function Admission() {
         roll_no: formData.roll_no,
         admission_date: formData.admission_date,
         total_fee: Number(formData.total_fee || 0),
-        other_fee: Number(formData.other_fee || 0),
-        discount_fee: Number(formData.discount_fee || 0),
+        
         photo_url: publicPhotoUrl || previewUrl,
       };
 
@@ -363,7 +362,7 @@ function Admission() {
           <h3>Academic Information</h3>
           <div className="profile-grid">
             <div>
-              <strong>Course / Class Assigned *</strong>
+              <strong>Class</strong>
               <input
                 type="text"
                 name="course"
@@ -406,26 +405,7 @@ function Admission() {
                 onChange={handleChange}
                 required
               />
-            </div>
-            <div>
-              <strong>Other External Charges (₹)</strong>
-              <input
-                type="number"
-                name="other_fee"
-                value={formData.other_fee}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <strong>Concession / Discount (₹)</strong>
-              <input
-                type="number"
-                name="discount_fee"
-                value={formData.discount_fee}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            </div> 
           </div>
         </div>
 

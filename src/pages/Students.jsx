@@ -16,6 +16,7 @@ function Students() {
       .from("students")
       .select("*")
       .order("id");
+    
 
     if (error) {
       console.error(error);
@@ -57,7 +58,8 @@ function Students() {
   const filteredStudents = students.filter(
     (student) =>
       (student.name || "").toLowerCase().includes(search.toLowerCase()) ||
-      (student.student_id || "").toLowerCase().includes(search.toLowerCase()),
+      (student.student_id || "").toLowerCase().includes(search.toLowerCase()) ||
+      (student.class || "").toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -76,7 +78,7 @@ function Students() {
       <div className="search-box">
         <input
           type="text"
-          placeholder="Search student by name or ID..."
+          placeholder="Search student by name, ID or class..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
