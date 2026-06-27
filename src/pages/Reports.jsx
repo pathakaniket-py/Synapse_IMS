@@ -149,14 +149,17 @@ function Reports() {
         if (student.admission_date) {
           const sStart = new Date(student.admission_date);
           const sNow = new Date();
-          sMonths = Math.max(1, (sNow.getFullYear() - sStart.getFullYear()) * 12 + (sNow.getMonth() - sStart.getMonth()));
+          sMonths = Math.max(
+            1,
+            (sNow.getFullYear() - sStart.getFullYear()) * 12 +
+              (sNow.getMonth() - sStart.getMonth()),
+          );
         }
         const sExpectedSoFar = sMonths * sTotalFee + sOtherFee - sDiscountFee;
         const sBackDues = Math.max(0, sExpectedSoFar - sTotalPaid);
         const sMonthlyFee = sTotalFee;
         const sTotalPayable = sMonthlyFee + sBackDues;
-        
-        
+
         const concatNo = `DEM-${currentYear}-${String(idx + 1).padStart(4, "0")}`;
 
         return `
@@ -244,13 +247,16 @@ function Reports() {
   if (selectedStudent?.admission_date) {
     const start = new Date(selectedStudent.admission_date);
     const now = new Date();
-    monthsSinceAdmission = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    monthsSinceAdmission =
+      (now.getFullYear() - start.getFullYear()) * 12 +
+      (now.getMonth() - start.getMonth());
     if (monthsSinceAdmission < 1) monthsSinceAdmission = 1;
   }
 
-  const totalExpectedSoFar = monthsSinceAdmission * monthlyFee + otherFee - discountFee;
+  const totalExpectedSoFar =
+    monthsSinceAdmission * monthlyFee + otherFee - discountFee;
   const backDues = Math.max(0, totalExpectedSoFar - totalPaid);
-  const totalDueNow = monthlyFee + backDues;
+  const totalDueNow = backDues;
 
   const currentFormattedDate = new Date().toLocaleDateString("en-IN");
 
@@ -314,7 +320,9 @@ function Reports() {
       `}</style>
 
       {/* WEB DASHBOARD WORKSPACE */}
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px 16px" }}>
+      <div
+        style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px 16px" }}
+      >
         <div className="page-header" style={{ marginBottom: "30px" }}>
           <h1
             className="page-title"
@@ -333,424 +341,426 @@ function Reports() {
             alignItems: "flex-start",
           }}
         >
-        {/* ===== SECTION 1: INVOICE BILL (INDIVIDUAL) ===== */}
-        <div
-          className="card billing-card"
-          style={{
-            position: "relative",
-            flex: "1 1 400px",
-            padding: "24px",
-          }}
-        >
+          {/* ===== SECTION 1: INVOICE BILL (INDIVIDUAL) ===== */}
           <div
+            className="card billing-card"
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              marginBottom: "18px",
-            }}
-          >
-            <div
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                background: "#818cf8",
-              }}
-            ></div>
-            <label
-              style={{
-                color: "#e5e7eb",
-                fontWeight: "700",
-                fontSize: "15px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              Invoice Bill — Individual
-            </label>
-          </div>
-
-          <strong
-            style={{
-              display: "block",
-              marginBottom: "6px",
-              fontSize: "13px",
-              color: "#94a3b8",
-            }}
-          >
-            Search Student (Name, ID or Class)
-          </strong>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
               position: "relative",
-              marginBottom: "18px",
+              flex: "1 1 400px",
+              padding: "24px",
             }}
           >
-            <MdSearch
-              style={{
-                position: "absolute",
-                left: "14px",
-                color: "var(--muted)",
-                fontSize: "22px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Type name, ID or class..."
-              value={studentSearchInput}
-              onChange={(e) => {
-                setStudentSearchInput(e.target.value);
-                setShowDropdown(true);
-              }}
-              onFocus={() => setShowDropdown(true)}
-              onBlur={() => {
-                setTimeout(() => {
-                  setShowDropdown(false);
-                }, 250);
-              }}
-              style={{
-                width: "100%",
-                padding: "14px 40px 14px 45px",
-                fontSize: "15px",
-                borderRadius: "10px",
-              }}
-            />
-            <MdArrowDropDown
-              style={{
-                position: "absolute",
-                right: "14px",
-                color: "var(--muted)",
-                fontSize: "24px",
-                pointerEvents: "none",
-              }}
-            />
-          </div>
-
-          {/* AUTOCOMPLETE DROPDOWN */}
-          {showDropdown && (
             <div
-              className="autocomplete-dropdown fade-in"
               style={{
-                position: "absolute",
-                top: "100%",
-                left: "0",
-                right: "0",
-                background: "linear-gradient(145deg, #1f2937, #111827)",
-                border: "1px solid rgba(129, 140, 248, 0.25)",
-                borderRadius: "16px",
-                marginTop: "4px",
-                maxHeight: "200px",
-                overflowY: "auto",
-                zIndex: 1000,
-                boxShadow:
-                  "0 12px 30px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0,0,0,0.3)",
-                padding: "6px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginBottom: "18px",
               }}
             >
-              {filteredStudentSearchOptions.length === 0 ? (
-                <div
-                  style={{
-                    padding: "16px",
-                    color: "var(--muted)",
-                    textAlign: "center",
-                    fontSize: "14px",
-                  }}
-                >
-                  No students matched
-                </div>
-              ) : (
-                filteredStudentSearchOptions.map((student) => (
+              <div
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: "#818cf8",
+                }}
+              ></div>
+              <label
+                style={{
+                  color: "#e5e7eb",
+                  fontWeight: "700",
+                  fontSize: "15px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Invoice Bill — Individual
+              </label>
+            </div>
+
+            <strong
+              style={{
+                display: "block",
+                marginBottom: "6px",
+                fontSize: "13px",
+                color: "#94a3b8",
+              }}
+            >
+              Search Student (Name, ID or Class)
+            </strong>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                position: "relative",
+                marginBottom: "18px",
+              }}
+            >
+              <MdSearch
+                style={{
+                  position: "absolute",
+                  left: "14px",
+                  color: "var(--muted)",
+                  fontSize: "22px",
+                }}
+              />
+              <input
+                type="text"
+                placeholder="Type name, ID or class..."
+                value={studentSearchInput}
+                onChange={(e) => {
+                  setStudentSearchInput(e.target.value);
+                  setShowDropdown(true);
+                }}
+                onFocus={() => setShowDropdown(true)}
+                onBlur={() => {
+                  setTimeout(() => {
+                    setShowDropdown(false);
+                  }, 250);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "14px 40px 14px 45px",
+                  fontSize: "15px",
+                  borderRadius: "10px",
+                }}
+              />
+              <MdArrowDropDown
+                style={{
+                  position: "absolute",
+                  right: "14px",
+                  color: "var(--muted)",
+                  fontSize: "24px",
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
+
+            {/* AUTOCOMPLETE DROPDOWN */}
+            {showDropdown && (
+              <div
+                className="autocomplete-dropdown fade-in"
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: "0",
+                  right: "0",
+                  background: "linear-gradient(145deg, #1f2937, #111827)",
+                  border: "1px solid rgba(129, 140, 248, 0.25)",
+                  borderRadius: "16px",
+                  marginTop: "4px",
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                  zIndex: 1000,
+                  boxShadow:
+                    "0 12px 30px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0,0,0,0.3)",
+                  padding: "6px",
+                }}
+              >
+                {filteredStudentSearchOptions.length === 0 ? (
                   <div
-                    key={student.student_id}
-                    onClick={() => handleSelectStudent(student)}
-                    className="immersive-item"
                     style={{
-                      padding: "12px 16px",
-                      cursor: "pointer",
-                      borderRadius: "10px",
-                      color: "#e2e8f0",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginBottom: "2px",
+                      padding: "16px",
+                      color: "var(--muted)",
+                      textAlign: "center",
+                      fontSize: "14px",
                     }}
                   >
-                    <span style={{ fontWeight: "500" }}>{student.name}</span>
-                    <span
+                    No students matched
+                  </div>
+                ) : (
+                  filteredStudentSearchOptions.map((student) => (
+                    <div
+                      key={student.student_id}
+                      onClick={() => handleSelectStudent(student)}
+                      className="immersive-item"
                       style={{
-                        color: "#818cf8",
-                        fontSize: "13px",
-                        background: "rgba(129, 140, 248, 0.1)",
-                        padding: "2px 8px",
-                        borderRadius: "6px",
+                        padding: "12px 16px",
+                        cursor: "pointer",
+                        borderRadius: "10px",
+                        color: "#e2e8f0",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "2px",
                       }}
                     >
-                      {student.student_id}
-                    </span>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-
-          {/* SELECTED STUDENT INFO + PRINT CONTROLS */}
-          {selectedStudent ? (
-            <div
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(17, 24, 39, 0.9))",
-                border: "1px solid rgba(129, 140, 248, 0.15)",
-                borderRadius: "14px",
-                padding: "20px",
-                marginTop: "4px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "16px",
-                  borderBottom: "1px solid var(--border)",
-                  paddingBottom: "12px",
-                }}
-              >
-                <div>
-                  <h3 style={{ margin: 0, color: "#fff", fontSize: "18px" }}>
-                    {selectedStudent.name}
-                  </h3>
-                  <p
-                    style={{
-                      margin: "2px 0 0 0",
-                      color: "var(--muted)",
-                      fontSize: "12px",
-                    }}
-                  >
-                    ID: {selectedStudent.student_id} |{" "}
-                    <span style={{ color: "#fcd34d" }}>
-                      {generatedPaymentId}
-                    </span>
-                  </p>
-                </div>
+                      <span style={{ fontWeight: "500" }}>{student.name}</span>
+                      <span
+                        style={{
+                          color: "#818cf8",
+                          fontSize: "13px",
+                          background: "rgba(129, 140, 248, 0.1)",
+                          padding: "2px 8px",
+                          borderRadius: "6px",
+                        }}
+                      >
+                        {student.student_id}
+                      </span>
+                    </div>
+                  ))
+                )}
               </div>
+            )}
 
+            {/* SELECTED STUDENT INFO + PRINT CONTROLS */}
+            {selectedStudent ? (
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginBottom: "12px",
+                  background:
+                    "linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(17, 24, 39, 0.9))",
+                  border: "1px solid rgba(129, 140, 248, 0.15)",
+                  borderRadius: "14px",
+                  padding: "20px",
+                  marginTop: "4px",
                 }}
               >
                 <div
                   style={{
-                    width: "6px",
-                    height: "6px",
-                    borderRadius: "50%",
-                    background: "#818cf8",
-                  }}
-                ></div>
-                <label
-                  style={{
-                    color: "#94a3b8",
-                    fontWeight: "600",
-                    fontSize: "11px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "16px",
+                    borderBottom: "1px solid var(--border)",
+                    paddingBottom: "12px",
                   }}
                 >
-                  Fee Paid Till Month Of:
-                </label>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  flexWrap: "wrap",
-                }}
-              >
-                <div style={{ position: "relative", width: "220px" }}>
-                  <select
-                    value={paidTillMonth}
-                    onChange={(e) => setPaidTillMonth(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 36px 10px 12px",
-                      background: "#1e293b",
-                      color: paidTillMonth ? "#f8fafc" : "#94a3b8",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                      borderRadius: "8px",
-                      fontSize: "13px",
-                      fontWeight: "500",
-                      cursor: "pointer",
-                      appearance: "none",
-                      outline: "none",
-                    }}
-                  >
-                    <option value="" disabled>
-                      Select Month
-                    </option>
-                    {monthNames.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                  <MdArrowDropDown
-                    style={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "#818cf8",
-                      fontSize: "20px",
-                      pointerEvents: "none",
-                    }}
-                  />
+                  <div>
+                    <h3 style={{ margin: 0, color: "#fff", fontSize: "18px" }}>
+                      {selectedStudent.name}
+                    </h3>
+                    <p
+                      style={{
+                        margin: "2px 0 0 0",
+                        color: "var(--muted)",
+                        fontSize: "12px",
+                      }}
+                    >
+                      ID: {selectedStudent.student_id} |{" "}
+                      <span style={{ color: "#fcd34d" }}>
+                        {generatedPaymentId}
+                      </span>
+                    </p>
+                  </div>
                 </div>
 
-                <button
-                  onClick={handlePrintReceipt}
-                  className="glow-btn"
+                <div
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "6px",
-                    padding: "10px 20px",
-                    background: "linear-gradient(135deg, #6366f1, #4f46e5)",
-                    color: "#ffffff",
-                    border: "none",
-                    borderRadius: "8px",
-                    fontSize: "13px",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                    boxShadow: "0 4px 12px rgba(99, 102, 241, 0.3)",
-                    whiteSpace: "nowrap",
+                    gap: "8px",
+                    marginBottom: "12px",
                   }}
                 >
-                  <MdPrint style={{ fontSize: "16px" }} /> Print Invoice Bill
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "30px",
-                border: "2px dashed var(--border)",
-                borderRadius: "12px",
-              }}
-            >
-              <p style={{ margin: 0, color: "var(--muted)", fontSize: "13px" }}>
-                Select a student above to print invoice bill.
-              </p>
-            </div>
-          )}
-        </div>
+                  <div
+                    style={{
+                      width: "6px",
+                      height: "6px",
+                      borderRadius: "50%",
+                      background: "#818cf8",
+                    }}
+                  ></div>
+                  <label
+                    style={{
+                      color: "#94a3b8",
+                      fontWeight: "600",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    Fee Paid Till Month Of:
+                  </label>
+                </div>
 
-        {/* ===== SECTION 2: DEMAND BILL (CLASS WISE) ===== */}
-        <div
-          className="card billing-card demand-card"
-          style={{
-            flex: "1 1 400px",
-            padding: "24px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              marginBottom: "18px",
-            }}
-          >
-            <div
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                background: "#fbbf24",
-              }}
-            ></div>
-            <label
-              style={{
-                color: "#e5e7eb",
-                fontWeight: "700",
-                fontSize: "15px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              Demand Bill — Class Wise
-            </label>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <div style={{ position: "relative", width: "220px" }}>
+                    <select
+                      value={paidTillMonth}
+                      onChange={(e) => setPaidTillMonth(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "10px 36px 10px 12px",
+                        background: "#1e293b",
+                        color: paidTillMonth ? "#f8fafc" : "#94a3b8",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        borderRadius: "8px",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        cursor: "pointer",
+                        appearance: "none",
+                        outline: "none",
+                      }}
+                    >
+                      <option value="" disabled>
+                        Select Month
+                      </option>
+                      {monthNames.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                    <MdArrowDropDown
+                      style={{
+                        position: "absolute",
+                        right: "10px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "#818cf8",
+                        fontSize: "20px",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  </div>
+
+                  <button
+                    onClick={handlePrintReceipt}
+                    className="glow-btn"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      padding: "10px 20px",
+                      background: "linear-gradient(135deg, #6366f1, #4f46e5)",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      boxShadow: "0 4px 12px rgba(99, 102, 241, 0.3)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <MdPrint style={{ fontSize: "16px" }} /> Print Invoice Bill
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "30px",
+                  border: "2px dashed var(--border)",
+                  borderRadius: "12px",
+                }}
+              >
+                <p
+                  style={{ margin: 0, color: "var(--muted)", fontSize: "13px" }}
+                >
+                  Select a student above to print invoice bill.
+                </p>
+              </div>
+            )}
           </div>
 
-          <strong
+          {/* ===== SECTION 2: DEMAND BILL (CLASS WISE) ===== */}
+          <div
+            className="card billing-card demand-card"
             style={{
-              display: "block",
-              marginBottom: "6px",
-              fontSize: "13px",
-              color: "#94a3b8",
+              flex: "1 1 400px",
+              padding: "24px",
             }}
           >
-            Select Class
-          </strong>
-          <select
-            value={demandClassFilter}
-            onChange={(e) => setDemandClassFilter(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px 14px",
-              background: "rgba(15, 23, 42, 0.6)",
-              border: "1px solid var(--border)",
-              borderRadius: "10px",
-              color: "#fff",
-              fontSize: "13px",
-              outline: "none",
-              cursor: "pointer",
-              marginBottom: "16px",
-            }}
-          >
-            <option value="">Select a class</option>
-            {studentClassOptions.map((cls) => (
-              <option key={cls} value={cls}>
-                {cls}
-              </option>
-            ))}
-          </select>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginBottom: "18px",
+              }}
+            >
+              <div
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: "#fbbf24",
+                }}
+              ></div>
+              <label
+                style={{
+                  color: "#e5e7eb",
+                  fontWeight: "700",
+                  fontSize: "15px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Demand Bill — Class Wise
+              </label>
+            </div>
 
-          <button
-            onClick={handlePrintDemandBill}
-            disabled={!demandClassFilter}
-            className="glow-btn"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "11px 22px",
-              background: demandClassFilter
-                ? "linear-gradient(135deg, #f59e0b, #d97706)"
-                : "rgba(255,255,255,0.05)",
-              color: demandClassFilter ? "#ffffff" : "#64748b",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "14px",
-              fontWeight: "600",
-              cursor: demandClassFilter ? "pointer" : "not-allowed",
-              boxShadow: demandClassFilter
-                ? "0 4px 12px rgba(245, 158, 11, 0.3)"
-                : "none",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <MdPrint style={{ fontSize: "18px" }} /> Generate Demand Bill
-          </button>
-        </div>
+            <strong
+              style={{
+                display: "block",
+                marginBottom: "6px",
+                fontSize: "13px",
+                color: "#94a3b8",
+              }}
+            >
+              Select Class
+            </strong>
+            <select
+              value={demandClassFilter}
+              onChange={(e) => setDemandClassFilter(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px 14px",
+                background: "rgba(15, 23, 42, 0.6)",
+                border: "1px solid var(--border)",
+                borderRadius: "10px",
+                color: "#fff",
+                fontSize: "13px",
+                outline: "none",
+                cursor: "pointer",
+                marginBottom: "16px",
+              }}
+            >
+              <option value="">Select a class</option>
+              {studentClassOptions.map((cls) => (
+                <option key={cls} value={cls}>
+                  {cls}
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={handlePrintDemandBill}
+              disabled={!demandClassFilter}
+              className="glow-btn"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "11px 22px",
+                background: demandClassFilter
+                  ? "linear-gradient(135deg, #f59e0b, #d97706)"
+                  : "rgba(255,255,255,0.05)",
+                color: demandClassFilter ? "#ffffff" : "#64748b",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "14px",
+                fontWeight: "600",
+                cursor: demandClassFilter ? "pointer" : "not-allowed",
+                boxShadow: demandClassFilter
+                  ? "0 4px 12px rgba(245, 158, 11, 0.3)"
+                  : "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <MdPrint style={{ fontSize: "18px" }} /> Generate Demand Bill
+            </button>
+          </div>
         </div>
       </div>
 
@@ -994,48 +1004,7 @@ function Reports() {
                 </td>
               </tr>
 
-              <tr>
-                <th
-                  style={{
-                    ...tableCellStyle,
-                    padding: "10px 18px",
-                    fontSize: "15px",
-                  }}
-                >
-                  Back Dues
-                </th>
-                <td
-                  style={{
-                    ...tableCellStyle,
-                    padding: "10px 18px",
-                    fontSize: "15px",
-                  }}
-                >
-                  ₹ {backDues.toFixed(2)}
-                </td>
-              </tr>
-
-              <tr>
-                <th
-                  style={{
-                    ...tableCellStyle,
-                    padding: "10px 18px",
-                    fontSize: "15px",
-                  }}
-                >
-                  Total Fee Payable
-                </th>
-                <td
-                  style={{
-                    ...tableCellStyle,
-                    padding: "10px 18px",
-                    fontSize: "15px",
-                  }}
-                >
-                  ₹ {totalDueNow.toFixed(2)}
-                </td>
-              </tr>
-
+              
               <tr>
                 <th
                   style={{
@@ -1054,6 +1023,26 @@ function Reports() {
                   }}
                 >
                   ₹ {totalPaid.toFixed(2)}
+                </td>
+              </tr>
+              <tr>
+                <th
+                  style={{
+                    ...tableCellStyle,
+                    padding: "10px 18px",
+                    fontSize: "15px",
+                  }}
+                >
+                  Remainig Amount / Dues
+                </th>
+                <td
+                  style={{
+                    ...tableCellStyle,
+                    padding: "10px 18px",
+                    fontSize: "15px",
+                  }}
+                >
+                  ₹ {backDues.toFixed(2)}
                 </td>
               </tr>
             </tbody>
