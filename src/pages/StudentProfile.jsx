@@ -7,6 +7,12 @@ function StudentProfile() {
   const navigate = useNavigate();
   const [student, setStudent] = useState(null);
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "—";
+    const [y, m, d] = dateStr.split("-");
+    return `${d}/${m}/${y}`;
+  };
+
   useEffect(() => {
     if (id) {
       fetchStudent();
@@ -205,11 +211,11 @@ function StudentProfile() {
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", width: "100%" }}>
           {[
-            { label: "ADMISSION DATE", value: student.admission_date },
+            { label: "ADMISSION DATE", value: formatDate(student.admission_date) },
             { label: "FATHER NAME", value: student.father_name },
             { label: "MOTHER NAME", value: student.mother_name },
             { label: "GENDER", value: student.gender },
-            { label: "DATE OF BIRTH", value: student.dob },
+            { label: "DATE OF BIRTH", value: formatDate(student.dob) },
             { label: "CATEGORY", value: student.category },
             { label: "AADHAAR", value: student.aadhaar_no },
             { label: "MOBILE", value: student.phone },

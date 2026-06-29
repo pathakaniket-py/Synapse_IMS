@@ -16,6 +16,9 @@ function Reports() {
   // Default ko empty rakha hai taaki auto-select na ho
   const [paidTillMonth, setPaidTillMonth] = useState("");
   const [generatedPaymentId, setGeneratedPaymentId] = useState("");
+  const [latestPaymentNote, setLatestPaymentNote] = useState("");
+  const [demandOtherFee, setDemandOtherFee] = useState("");
+  const [demandOtherFeeNote, setDemandOtherFeeNote] = useState("");
   const tableCellStyle = {
     padding: "10px 18px",
     border: "1.5px solid #000",
@@ -77,6 +80,22 @@ function Reports() {
     const randomDigits = Math.floor(10000 + Math.random() * 90000);
     const newPaymentId = `SWC-${currentYear}-${randomDigits}`;
     setGeneratedPaymentId(newPaymentId);
+
+    fetchLatestPaymentNote(student.student_id);
+  };
+
+  const fetchLatestPaymentNote = async (studentId) => {
+    if (!studentId) { setLatestPaymentNote(""); return; }
+    try {
+      const { data } = await supabase
+        .from("payments")
+        .select("note")
+        .eq("student_id", studentId)
+        .order("id", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      setLatestPaymentNote(data?.note || "");
+    } catch { setLatestPaymentNote(""); }
   };
 
   const handlePrintReceipt = () => {
@@ -142,9 +161,10 @@ function Reports() {
     const billHtml = classStudents
       .map((student, idx) => {
         const sTotalFee = Number(student.total_fee || 0);
-        const sOtherFee = Number(student.other_fee || 0);
+        const sOtherFee = Number(demandOtherFee || 0);
         const sDiscountFee = Number(student.discount_fee || 0);
         const sTotalPaid = Number(student.total_paid || 0);
+        const sNote = demandOtherFeeNote || "";
         let sMonths = 1;
         if (student.admission_date) {
           const sStart = new Date(student.admission_date);
@@ -159,8 +179,13 @@ function Reports() {
         const sBackDues = Math.max(0, sExpectedSoFar - sTotalPaid);
         const sMonthlyFee = sTotalFee;
         const sTotalPayable = sMonthlyFee + sBackDues;
+        const sNetPayable = sMonthlyFee + sOtherFee;
 
         const concatNo = `DEM-${currentYear}-${String(idx + 1).padStart(4, "0")}`;
+
+        const otherFeeLabel = sNote
+          ? `Other Fee (${sNote})`
+          : "Other Fee";
 
         return `
           <div style="page-break-after:${idx < classStudents.length - 1 ? "always" : "avoid"};display:flex;flex-direction:column;min-height:90vh;justify-content:space-between;">
@@ -183,6 +208,8 @@ function Reports() {
                   <tr><th style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:normal;font-size:15px;">Student Name</th><td style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:bold;font-size:15px;">${student.name || "—"}</td></tr>
                   <tr><th style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:normal;font-size:15px;">Father's Name</th><td style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:bold;font-size:15px;">${student.father_name || "—"}</td></tr>
                   <tr><th style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:normal;font-size:15px;">Monthly Fee</th><td style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:bold;font-size:15px;">₹ ${sMonthlyFee.toFixed(2)}</td></tr>
+                  <tr><th style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:normal;font-size:15px;">${otherFeeLabel}</th><td style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:bold;font-size:15px;">₹ ${sOtherFee.toFixed(2)}</td></tr>
+                  <tr style="font-weight:bold;"><th style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:bold;font-size:15px;">Net Payable Fee</th><td style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:bold;font-size:15px;">₹ ${sNetPayable.toFixed(2)}</td></tr>
                   <tr><th style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:normal;font-size:15px;">Back Dues</th><td style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:bold;font-size:15px;">₹ ${sBackDues.toFixed(2)}</td></tr>
                   <tr><th style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:normal;font-size:15px;">Total Fee Payable</th><td style="padding:9px 16px;border:1.5px solid #000;text-align:left;font-weight:bold;font-size:15px;">₹ ${sTotalPayable.toFixed(2)}</td></tr>
                 </tbody>
@@ -734,6 +761,64 @@ function Reports() {
               ))}
             </select>
 
+            <strong
+              style={{
+                display: "block",
+                marginBottom: "6px",
+                fontSize: "13px",
+                color: "#94a3b8",
+              }}
+            >
+              Other Fee (₹)
+            </strong>
+            <input
+              type="number"
+              placeholder="e.g. 500"
+              value={demandOtherFee}
+              onChange={(e) => setDemandOtherFee(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px 14px",
+                background: "rgba(15, 23, 42, 0.6)",
+                border: "1px solid var(--border)",
+                borderRadius: "10px",
+                color: "#fff",
+                fontSize: "13px",
+                outline: "none",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+
+            <strong
+              style={{
+                display: "block",
+                marginBottom: "6px",
+                fontSize: "13px",
+                color: "#94a3b8",
+              }}
+            >
+              What is this Other Fee for?
+            </strong>
+            <input
+              type="text"
+              placeholder='e.g. Books, Supplies, Uniform...'
+              value={demandOtherFeeNote}
+              onChange={(e) => setDemandOtherFeeNote(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px 14px",
+                background: "rgba(15, 23, 42, 0.6)",
+                border: "1px solid var(--border)",
+                borderRadius: "10px",
+                color: "#fff",
+                fontSize: "13px",
+                outline: "none",
+                marginBottom: "16px",
+                boxSizing: "border-box",
+              }}
+            />
+
             <button
               onClick={handlePrintDemandBill}
               disabled={!demandClassFilter}
@@ -1004,7 +1089,50 @@ function Reports() {
                 </td>
               </tr>
 
-              
+              <tr>
+                <th
+                  style={{
+                    ...tableCellStyle,
+                    padding: "10px 18px",
+                    fontSize: "15px",
+                  }}
+                >
+                  Other Fee{latestPaymentNote ? ` (${latestPaymentNote})` : ""}
+                </th>
+                <td
+                  style={{
+                    ...tableCellStyle,
+                    padding: "10px 18px",
+                    fontSize: "15px",
+                  }}
+                >
+                  ₹ {otherFee.toFixed(2)}
+                </td>
+              </tr>
+
+              <tr>
+                <th
+                  style={{
+                    ...tableCellStyle,
+                    padding: "10px 18px",
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Net Payable Fee
+                </th>
+                <td
+                  style={{
+                    ...tableCellStyle,
+                    padding: "10px 18px",
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  ₹ {(monthlyFee + otherFee).toFixed(2)}
+                </td>
+              </tr>
+
               <tr>
                 <th
                   style={{

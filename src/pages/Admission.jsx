@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { MdCalendarMonth } from "react-icons/md";
 import { supabase } from "../services/supabase";
 
 function Admission() {
@@ -8,6 +9,7 @@ function Admission() {
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
+  const datePickerRef = useRef(null);
 
   const [formData, setFormData] = useState({
     student_name: "",
@@ -45,11 +47,18 @@ function Admission() {
       return;
     }
 
+    const toDDMMYYYY = (str) => {
+      if (!str) return "";
+      const [y, m, d] = str.split("-");
+      if (y && m && d) return `${d}/${m}/${y}`;
+      return str;
+    };
+
     setFormData({
       student_name: data.name || "",
       father_name: data.father_name || "",
       mother_name: data.mother_name || "",
-      dob: data.dob || "",
+      dob: toDDMMYYYY(data.dob),
       gender: data.gender || "",
       category: data.category || "",
       aadhaar_no: data.aadhaar_no || "",
@@ -92,6 +101,14 @@ function Admission() {
     setLoading(true);
     let publicPhotoUrl = "";
 
+    // Convert DD/MM/YYYY to YYYY-MM-DD for database
+    const parseDate = (str) => {
+      if (!str) return "";
+      const parts = str.split("/");
+      if (parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+      return str;
+    };
+
     try {
       if (imageFile) {
         const fileExt = imageFile.name.split(".").pop();
@@ -125,9 +142,12 @@ function Admission() {
         roll_no: formData.roll_no,
         admission_date: formData.admission_date,
         total_fee: Number(formData.total_fee || 0),
-        
         photo_url: publicPhotoUrl || previewUrl,
       };
+
+      if (payload.dob && payload.dob.includes("/")) {
+        payload.dob = parseDate(payload.dob);
+      }
 
       let dbError;
 
@@ -146,7 +166,7 @@ function Admission() {
           .select("student_id")
           .order("student_id", { ascending: false })
           .limit(1)
-          .single();
+          .maybeSingle();
 
         let nextNumber = 1;
 
@@ -279,13 +299,44 @@ function Admission() {
             </div>
             <div>
               <strong>Date of Birth</strong>
-              <input
-                type="date"
-                name="dob"
-                value={formData.dob}
-                onChange={handleChange}
-                required
-              />
+              <div style={{ display: "flex", gap: "6px" }}>
+                <input
+                  type="text"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={handleChange}
+                  placeholder="DD/MM/YYYY"
+                  required
+                  style={{ flex: 1 }}
+                />
+                <button
+                  type="button"
+                  onClick={() => datePickerRef.current?.showPicker()}
+                  style={{
+                    padding: "8px 12px",
+                    background: "rgba(129, 140, 248, 0.15)",
+                    border: "1px solid rgba(129, 140, 248, 0.25)",
+                    borderRadius: "10px",
+                    color: "#a5b4fc",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    lineHeight: 1,
+                  }}
+                  title="Pick a date"
+                >
+                  <MdCalendarMonth size={18} />
+                </button>
+                <input
+                  type="date"
+                  ref={datePickerRef}
+                  onChange={(e) => {
+                    if (!e.target.value) return;
+                    const [y, m, d] = e.target.value.split("-");
+                    handleChange({ target: { name: "dob", value: `${d}/${m}/${y}` } });
+                  }}
+                  style={{ width: 0, height: 0, padding: 0, border: "none", opacity: 0, position: "absolute" }}
+                />
+              </div>
             </div>
             <div>
               <strong>Gender</strong>
@@ -405,7 +456,7 @@ function Admission() {
                 onChange={handleChange}
                 required
               />
-            </div> 
+            </div>
           </div>
         </div>
 
